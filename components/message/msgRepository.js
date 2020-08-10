@@ -1,20 +1,31 @@
-const messages = [];
+const msgModel = require("./msgModel");
+const { config } = require("../../config/config");
+const db = require("mongoose");
 
-const save = (message) => {
-  return new Promise((resolve, reject) => {
-    try {
-      messages.push(message);
-      resolve("Message add succesfuly");
-    } catch (error) {
-      reject(error);
-    }
-  });
+const URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`;
+
+db.connect(URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const save = async (message) => {
+  try {
+    const Message = new msgModel(message);
+    const result = await Message.save();
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
-const list = () => {
-  return new Promise((resolve, reject) => {
-    messages.length !== 0 ? resolve(messages) : reject("DB is empty");
-  });
+const list = async () => {
+  try {
+    const Messages = await msgModel.find();
+    return Messages;
+  } catch (error) {
+    return error;
+  }
 };
 
 module.exports = {

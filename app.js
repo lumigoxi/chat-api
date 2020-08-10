@@ -6,4 +6,4 @@ app.use(express.json());
 app.use("/", express.static("./public"));
 routes(app);
 
-app.listen(8000, () => console.log("Lising at http://localhost:8000"));
+app.listen(8000, () => console.log("Listening on http://localhost:8000"));
