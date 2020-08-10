@@ -28,7 +28,17 @@ const list = async () => {
   }
 };
 
+const remove = async (id) => {
+  try {
+    const result = await msgModel.findByIdAndDelete(id);
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   save,
   list,
+  remove,
 };

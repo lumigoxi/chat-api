@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { success, error } = require("../../network/response");
-const { sendMessage, listMessages } = require("./msgService");
+const { sendMessage, listMessages, removeMessage } = require("./msgService");
 
 const router = Router();
 
@@ -15,12 +15,20 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { body } = req;
-    const response = await sendMessage(body);
+    const response = await sendMessage(req.body);
     success(req, res, response, 201);
   } catch (err) {
     error(req, res, "Cant save message", 500);
     console.log("[msgController]" + err);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await removeMessage(req.params);
+    success(req, res, result, 200);
+  } catch (err) {
+    error(req, res, err.message, 500);
   }
 });
 
