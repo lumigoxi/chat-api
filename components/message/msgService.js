@@ -1,4 +1,4 @@
-const { save, list, remove } = require("./msgRepository");
+const { save, list, remove, update } = require("./msgRepository");
 
 const sendMessage = async (body) => {
   try {
@@ -34,8 +34,18 @@ const removeMessage = async ({ id }) => {
   return "Message has been eliminate";
 };
 
+const updateMessage = async ({ id, message }) => {
+  if (!id || !message) {
+    throw new Error("Invalidad data");
+  }
+
+  const result = await update(id, message);
+  return { result, message: "Message has been updated" };
+};
+
 module.exports = {
   sendMessage,
   listMessages,
   removeMessage,
+  updateMessage,
 };

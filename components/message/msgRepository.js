@@ -7,6 +7,7 @@ const URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost
 db.connect(URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const save = async (message) => {
@@ -37,8 +38,19 @@ const remove = async (id) => {
   }
 };
 
+const update = async (id, message) => {
+  const updatedMessage = await msgModel.findByIdAndUpdate(
+    { _id: id },
+    { message },
+    { new: true }
+  );
+
+  return updatedMessage;
+};
+
 module.exports = {
   save,
   list,
   remove,
+  update,
 };
