@@ -1,4 +1,4 @@
-const { save, list, remove, update } = require("./msgRepository");
+const { save, list, remove, update, getOne } = require("./msgRepository");
 
 const sendMessage = async (body) => {
   try {
@@ -18,8 +18,8 @@ const sendMessage = async (body) => {
   }
 };
 
-const listMessages = () => {
-  return list();
+const listMessages = ({ ...query }) => {
+  return list(query);
 };
 
 const removeMessage = async ({ id }) => {
@@ -43,9 +43,23 @@ const updateMessage = async ({ id, message }) => {
   return { result, message: "Message has been updated" };
 };
 
+const getMessage = async ({ id }) => {
+  try {
+    const Message = await getOne(id);
+    if (!Message) {
+      console.log("[msgService] Message dont exist");
+      throw new Error("Message not found");
+    }
+    return Message;
+  } catch (error) {
+    throw new Error("Message not found");
+  }
+};
+
 module.exports = {
   sendMessage,
   listMessages,
   removeMessage,
   updateMessage,
+  getMessage,
 };

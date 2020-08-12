@@ -5,16 +5,26 @@ const {
   listMessages,
   removeMessage,
   updateMessage,
+  getMessage,
 } = require("./msgService");
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const response = await listMessages();
+    const response = await listMessages(req.query);
     success(req, res, response, 200);
   } catch (err) {
     error(req, res, "Message is empty", 500);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const Message = await getMessage(req.params);
+    success(req, res, Message, 200);
+  } catch (err) {
+    error(req, res, err.message, 500);
   }
 });
 

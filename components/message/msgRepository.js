@@ -1,14 +1,4 @@
 const msgModel = require("./msgModel");
-const { config } = require("../../config/config");
-const db = require("mongoose");
-
-const URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`;
-
-db.connect(URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
 
 const save = async (message) => {
   try {
@@ -20,9 +10,9 @@ const save = async (message) => {
   }
 };
 
-const list = async () => {
+const list = async (query) => {
   try {
-    const Messages = await msgModel.find();
+    const Messages = await msgModel.find(query);
     return Messages;
   } catch (error) {
     return error;
@@ -48,9 +38,15 @@ const update = async (id, message) => {
   return updatedMessage;
 };
 
+const getOne = async (id) => {
+  const Message = await msgModel.findById(id);
+  return Message;
+};
+
 module.exports = {
   save,
   list,
   remove,
   update,
+  getOne,
 };
